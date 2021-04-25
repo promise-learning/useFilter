@@ -1,55 +1,60 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useWorker, WORKER_STATUS } from '@koale/useworker';
+import { useDebounce } from 'use-debounce'
 
 import { filterData, hasFilters } from './utils/filterData';
 import { HookParams } from './types';
 
 export const useFilter = ({ data, search, filters }: HookParams) => {
   const [result, setResult] = useState(data);
+  const [debouncedSearch] = useDebounce(search, 100);
+  const [debouncedFilters] = useDebounce(filters, 100);
+
+  const isHavingFilters = useMemo(() => hasFilters(search, filters), [search, filters]);
 
   const [
     filterWorker,
-    { status: filterWorkerStatus, kill: killWorker },
+    { status: filterWorkerStatus, kill },
   ] = useWorker(filterData, {
-    autoTerminate: false, // prevent termination of worker after
+    autoTerminate: false,
   });
 
-  useEffect(
-    () => () => {
-      killWorker();
-    },
-    [killWorker]
-  );
+  useEffect(() => {
+    return () => kill();
+  }, [])
 
   useEffect(() => {
-    let isMounted = true;
+    let isActive = true;
 
     async function workerCallback() {
       const res = await filterWorker({
         data,
-        search,
-        filters,
+        search: debouncedSearch,
+        filters: debouncedFilters,
       });
-      if (isMounted) {
+      if (isActive) {
         setResult(res);
       }
     }
 
-    if (filterWorkerStatus !== WORKER_STATUS.RUNNING) {
-      killWorker();
-    }
-
     workerCallback();
 
-    () => {
-      isMounted = false;
+    return () => {
+      isActive = false;
+      kill();
     };
-  }, [search, filters]);
+  }, [debouncedSearch, debouncedFilters, kill]);
 
-  const isHavingFilters = hasFilters(search, filters);
+
+  if (isHavingFilters) {
+    return {
+      loading: filterWorkerStatus === WORKER_STATUS.RUNNING,
+      data: result,
+    };
+  }
 
   return {
-    loading: filterWorkerStatus === WORKER_STATUS.RUNNING,
-    data: isHavingFilters ? result : data,
+    loading: false,
+    data,
   };
 };

@@ -71,7 +71,7 @@ const App = () => {
         </label>
       </div>
 
-      {loading ? 'Loading...' : ''}
+      {loading ? 'Procsesing the data...' : ''}
       <p>
         <b>Filtered:</b> {result.length}
       </p>

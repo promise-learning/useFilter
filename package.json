@@ -59,6 +59,7 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "@koale/useworker": "^4.0.1"
+    "@koale/useworker": "^4.0.1",
+    "use-debounce": "^6.0.1"
   }
 }

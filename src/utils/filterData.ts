@@ -1,4 +1,4 @@
-import { Filter, Search, HookParams } from '../types';
+import { Filter, HookParams, Search } from '../types';
 
 export function hasFilters(
   search: Search = {
@@ -7,8 +7,9 @@ export function hasFilters(
   },
   filters: Filter = {}
 ): boolean {
-  if (search.query.trim()) return true;
-  return Object.keys(filters).some(item => filters[item].length);
+  if (search && search.query && search.query.trim()) return true;
+
+  return Object.keys(filters).some(item => filters[item] && filters[item].length);
 }
 
 export function filterData({
@@ -19,19 +20,18 @@ export function filterData({
     fields: [],
   },
 }: HookParams) {
-  console.log({ search, filters });
   let result = [...data];
 
-  if (search.query.trim()) {
+  if (search && search.query && search.query.trim()) {
     result = data.filter((item: any) =>
-      search.fields.some(field =>
-        item[field].toLowerCase().includes(search.query.toLocaleLowerCase())
+      search.fields.some((field: string) =>
+        item[field].toLowerCase().includes(search.query.toLowerCase())
       )
     );
   }
 
   Object.keys(filters).forEach((field: string) => {
-    if (filters[field].length) {
+    if (filters[field] && filters[field].length) {
       result = result.filter((item: any) =>
         filters[field].includes(item[field])
       );
