@@ -33,9 +33,13 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "usefilter",
-  "author": "Lakhan Samani",
+  "name": "@promise_learning/usefilter",
+  "authors": [
+    "Lakhan Samani <lakhan.m.samani@gmail.com>",
+    "Yash Joshi <jyash97@gmail.com>"
+  ],
   "module": "dist/usefilter.esm.js",
+  "repository": "https://github.com/promise-learning/useFilter",
   "size-limit": [
     {
       "path": "dist/usefilter.cjs.production.min.js",
