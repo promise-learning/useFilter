@@ -13,7 +13,7 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
+    "test": "tsdx test --passWithNoTests --silent",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
@@ -55,6 +55,8 @@
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
     "husky": "^6.0.0",
+    "jsdom-worker": "^0.2.1",
+    "node-fetch": "^2.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "size-limit": "^4.10.2",
