@@ -4,6 +4,8 @@ A hook to filter large amount of data in frontend. This filter uses [Web Worker]
 
 ## [Example](https://github.com/promise-learning/useFilter/tree/main/example)
 
+## [Code Sandbox](https://codesandbox.io/s/usefilter-demo-skp0g?file=/src/App.js)
+
 ## How to use
 
 ### Installation
