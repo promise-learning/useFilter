@@ -52,7 +52,7 @@ A hook to filter large amount of data in frontend. This filter uses [Web Worker]
 | Parameter | Type                                                                                                    | Required |
 | --------- | ------------------------------------------------------------------------------------------------------- | -------- |
 | data      | Array                                                                                                   | `true`   |
-| search    | Object -> `{query: '', fields: ''}`                                                                     | `false`  |
+| search    | Object -> `{query: '', fields: []}`. `query` is the search term and `fields` is the object keys to search on                                                                     | `false`  |
 | filters   | Object -> Key Value Pair. Where `key` is a field from object in array and value could be possible value | `false`  |
 
 ### Data Returned
