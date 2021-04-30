@@ -64,6 +64,11 @@ Object with following data is returned by the `useFilter` hook.
 | loading | `true` / `false` | Worker state if it is processing the data or not |
 | data    | Array            | filtered response based on the input             |
 
+# When to use?
+
+* Filter / Search large list in frontend
+* Filter / Search large data table in frontend
+
 # License
 
 [MIT License](https://github.com/promise-learning/useFilter/blob/main/LICENSE)
