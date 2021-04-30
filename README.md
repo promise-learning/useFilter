@@ -1,6 +1,6 @@
 # `useFilter`
 
-A hook to filter large amount of data in frontend. This filter uses [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) to process the data and thus doesn't block the application thread.
+A react hook to filter large amount of data in frontend using  [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).In order to keep the main thread free and run the web application without any glitches we can leverage the use of [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) which runs on a separate thread and can share the messages with main thread. Internally it uses [`@koale/useworker`](https://github.com/alewin/useWorker) hook to use the webworker communication.
 
 ## [Live Demo](https://codesandbox.io/s/usefilter-demo-skp0g?file=/src/App.js)
 
@@ -18,9 +18,9 @@ A hook to filter large amount of data in frontend. This filter uses [Web Worker]
   import from './data.json';
 
 
-  /////////////////////////////////////
-  Handle this using the state in ur app
-  ////////////////////////////////////
+  /////////////////////////////////////////
+  // handle this using the state in ur app
+  ////////////////////////////////////////
 
   const searchData = {
     query: '',
@@ -63,3 +63,7 @@ Object with following data is returned by the `useFilter` hook.
 | ------- | ---------------- | ------------------------------------------------ |
 | loading | `true` / `false` | Worker state if it is processing the data or not |
 | data    | Array            | filtered response based on the input             |
+
+# License
+
+[MIT License](https://github.com/promise-learning/useFilter/blob/main/LICENSE)
