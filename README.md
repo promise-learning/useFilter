@@ -2,9 +2,7 @@
 
 A hook to filter large amount of data in frontend. This filter uses [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) to process the data and thus doesn't block the application thread.
 
-## [Example](https://github.com/promise-learning/useFilter/tree/main/example)
-
-## [Code Sandbox](https://codesandbox.io/s/usefilter-demo-skp0g?file=/src/App.js)
+## [Live Demo](https://codesandbox.io/s/usefilter-demo-skp0g?file=/src/App.js)
 
 ## How to use
 
