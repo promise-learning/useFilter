@@ -1,6 +1,6 @@
 # `useFilter`
 
-A react hook to filter large amount of data in frontend using [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).In order to keep the main thread free and run the web application without any glitches we can leverage the use of [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) which runs on a separate thread and can share the messages with main thread. Internally it uses [`@koale/useworker`](https://github.com/alewin/useWorker) hook to use the webworker communication.
+A react hook to filter large amount of data in frontend using [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).In order to keep the main thread free and run the web application without any glitches we can leverage the use of [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) which runs on a separate thread and can share the messages with main thread. Internally it uses [Comlink](https://github.com/GoogleChromeLabs/comlink) for the webworker communication.
 
 ## [Live Demo](https://codesandbox.io/s/usefilter-demo-skp0g?file=/src/App.js)
 
