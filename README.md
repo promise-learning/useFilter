@@ -20,9 +20,9 @@ A react hook to filter large amount of data in frontend using [Web Worker](https
   import from './data.json';
 
 
-  /////////////////////////////////////////
-  // handle this using the state in ur app
-  ////////////////////////////////////////
+  ///////////////////////////////////////////
+  // handle this using the state in your app
+  //////////////////////////////////////////
 
   const searchData = {
     query: '',
