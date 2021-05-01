@@ -7,7 +7,7 @@ import { Search, Filter } from '../src/types/';
 
 // @ts-ignore
 import data from '../data/sample.json';
-import { useFilter } from '../dist';
+import { useFilter } from '../src';
 
 function sleep(ms: number): Promise<any> {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -84,8 +84,9 @@ describe('it', () => {
         container
       );
     });
-    await sleep(100);
     expect(container.textContent).toBe('loading');
+    await sleep(500);
+    expect(container.textContent).toBe('7');
 
     unmountComponentAtNode(container);
     container.remove();

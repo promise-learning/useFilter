@@ -1,14 +1,25 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+
 import { HookParams } from './types';
 import { hasFilters } from './utils/hasFilter';
-import { createComlink } from './utils/comlink';
+import { filterFn } from './utils/worker';
 
-const useComlink = createComlink(() => new Worker('./utils/worker.ts'));
+const code = `
+  ${filterFn.toString()}
+  onmessage = function(e) {
+    const params = e.data;
+    const filterData = filterFn(params)
+    postMessage(filterData);
+  };
+`;
+
+const worker = new Worker(
+  URL.createObjectURL(new Blob([code], { type: 'text/javascript' }))
+);
 
 export const useFilter = ({ data, search, filters }: HookParams) => {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(data);
-  const { proxy } = useComlink();
+  const [result, setResult] = useState([]);
 
   const isHavingFilters = useMemo(() => hasFilters(search, filters), [
     search,
@@ -18,25 +29,30 @@ export const useFilter = ({ data, search, filters }: HookParams) => {
   useEffect(() => {
     let isMounted = true;
 
-    (async () => {
-      if (isMounted) {
-        setLoading(true);
-      }
-      // @ts-ignore
-      const res = await proxy({ data, search, filters });
-      if (isMounted) {
-        setLoading(false);
-        setResult(res);
-      }
-    })();
+    if (isMounted) {
+      setLoading(true);
+    }
+    if (isHavingFilters) {
+      worker.postMessage({ data, search, filters });
+      worker.onmessage = e => {
+        if (isMounted) {
+          setLoading(false);
+          setResult(e.data);
+        }
+      };
+
+      worker.onerror = e => {
+        console.error(`Web worker error`, e);
+        if (isMounted) {
+          setLoading(false);
+        }
+      };
+    }
 
     return () => {
       isMounted = false;
     };
-  }, [proxy, search, filters]);
+  }, [search, filters]);
 
-  return {
-    loading,
-    data: isHavingFilters ? result : data,
-  };
+  return { loading, data: isHavingFilters ? result : data };
 };
