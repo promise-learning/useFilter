@@ -4,11 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "start": "mkdir -p ./dist && cp ../data/sample.json ./dist/ && parcel index.html",
+    "build": "mkdir -p ./dist && cp ../data/sample.json ./dist/ &&  parcel build index.html"
   },
   "dependencies": {
-    "react-app-polyfill": "^1.0.0"
+    "react-app-polyfill": "^1.0.0",
+    "react-window": "^1.8.6",
+    "use-debounce": "^6.0.1"
   },
   "alias": {
     "react": "../node_modules/react",

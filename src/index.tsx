@@ -1,60 +1,42 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useWorker, WORKER_STATUS } from '@koale/useworker';
-import { useDebounce } from 'use-debounce'
-
-import { filterData, hasFilters } from './utils/filterData';
 import { HookParams } from './types';
+import { hasFilters } from './utils/hasFilter';
+import { createComlink } from './utils/comlink';
+
+const useComlink = createComlink(() => new Worker('./utils/worker.ts'));
 
 export const useFilter = ({ data, search, filters }: HookParams) => {
+  const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(data);
-  const [debouncedSearch] = useDebounce(search, 100);
-  const [debouncedFilters] = useDebounce(filters, 100);
+  const { proxy } = useComlink();
 
-  const isHavingFilters = useMemo(() => hasFilters(search, filters), [search, filters]);
-
-  const [
-    filterWorker,
-    { status: filterWorkerStatus, kill },
-  ] = useWorker(filterData, {
-    autoTerminate: false,
-  });
+  const isHavingFilters = useMemo(() => hasFilters(search, filters), [
+    search,
+    filters,
+  ]);
 
   useEffect(() => {
-    return () => kill();
-  }, [])
+    let isMounted = true;
 
-  useEffect(() => {
-    let isActive = true;
-
-    async function workerCallback() {
-      const res = await filterWorker({
-        data,
-        search: debouncedSearch,
-        filters: debouncedFilters,
-      });
-      if (isActive) {
+    (async () => {
+      if (isMounted) {
+        setLoading(true);
+      }
+      // @ts-ignore
+      const res = await proxy({ data, search, filters });
+      if (isMounted) {
+        setLoading(false);
         setResult(res);
       }
-    }
-
-    workerCallback();
+    })();
 
     return () => {
-      isActive = false;
-      kill();
+      isMounted = false;
     };
-  }, [debouncedSearch, debouncedFilters, kill]);
-
-
-  if (isHavingFilters) {
-    return {
-      loading: filterWorkerStatus === WORKER_STATUS.RUNNING,
-      data: result,
-    };
-  }
+  }, [proxy, search, filters]);
 
   return {
-    loading: false,
-    data,
+    loading,
+    data: isHavingFilters ? result : data,
   };
 };

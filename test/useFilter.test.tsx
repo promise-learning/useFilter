@@ -2,7 +2,7 @@ import 'jsdom-worker';
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
-import { filterData } from '../src/utils/filterData';
+import { filterFn } from '../src/utils/worker';
 import { Search, Filter } from '../src/types/';
 
 // @ts-ignore
@@ -23,6 +23,8 @@ const TestComponent = ({
   //@ts-ignore
   const { loading, data: result } = useFilter({ data, search, filters });
 
+  console.log({ loading, l: result.length });
+
   if (loading) {
     return <div>loading</div>;
   }
@@ -37,7 +39,7 @@ describe('it', () => {
     };
 
     //@ts-ignore
-    const result = filterData({ data, search: searchData });
+    const result = filterFn({ data, search: searchData });
     expect(result.length).toBe(7);
   });
 
@@ -47,7 +49,7 @@ describe('it', () => {
     };
 
     //@ts-ignore
-    const result = filterData({ data, filters });
+    const result = filterFn({ data, filters });
     expect(result.length).toBe(5377);
   });
 
@@ -61,7 +63,7 @@ describe('it', () => {
     };
 
     //@ts-ignore
-    const result = filterData({ data, filters, search: searchData });
+    const result = filterFn({ data, filters, search: searchData });
     expect(result.length).toBe(7);
   });
 
@@ -82,10 +84,8 @@ describe('it', () => {
         container
       );
     });
+    await sleep(100);
     expect(container.textContent).toBe('loading');
-
-    await sleep(500);
-    expect(container.textContent).toBe('7');
 
     unmountComponentAtNode(container);
     container.remove();
