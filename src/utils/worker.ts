@@ -1,18 +1,7 @@
-import { Filter, HookParams, Search } from '../types';
+import { expose } from 'comlink';
+import { HookParams } from '../types';
 
-export function hasFilters(
-  search: Search = {
-    query: '',
-    fields: [],
-  },
-  filters: Filter = {}
-): boolean {
-  if (search && search.query && search.query.trim()) return true;
-
-  return Object.keys(filters).some(item => filters[item] && filters[item].length);
-}
-
-export function filterData({
+export function filterFn({
   data = [],
   filters = {},
   search = {
@@ -40,3 +29,5 @@ export function filterData({
 
   return result;
 }
+
+expose(filterFn);

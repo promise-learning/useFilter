@@ -1,10 +1,8 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { useFilter } from '../dist';
-
-// @ts-ignore
-import data from '../data/sample.json';
+import { DataContextProvider } from './DataContext';
+import Result from './Result';
 
 const searchData = {
   query: '',
@@ -20,7 +18,6 @@ const filtersData: {
 const App = () => {
   const [filters, setFilters] = React.useState(filtersData);
   const [search, setSearch] = React.useState(searchData);
-  const { loading, data: result } = useFilter({ data, search, filters });
 
   const handleSearchChange = e => {
     setSearch({
@@ -29,7 +26,7 @@ const App = () => {
     });
   };
 
-  const handleFilterChange = (e, label: string) => {
+  const handleFilterChange = (e, label) => {
     setFilters({
       ...filters,
       type: e.target.checked
@@ -39,60 +36,37 @@ const App = () => {
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        onChange={handleSearchChange}
-        placeholder="search director"
-        style={{
-          padding: 10,
-          borderRadius: 4,
-          border: '1px solid rgba(0, 0, 0, 0.7)',
-        }}
-      />
-
-      <div style={{ marginTop: 10 }}>
-        <b>Filter</b>
-        <label>
-          <input
-            type="checkbox"
-            onChange={e => handleFilterChange(e, 'Movie')}
-            checked={filters.type.includes('Movie')}
-          ></input>{' '}
-          Movie
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            onChange={e => handleFilterChange(e, 'TV Show')}
-            checked={filters.type.includes('TV Show')}
-          ></input>{' '}
-          TV Show
-        </label>
+    <DataContextProvider>
+      <div className="App">
+        <h1>useFilter Demo</h1>
+        <input
+          type="text"
+          placeholder="Search for director name"
+          className="search-input"
+          onChange={handleSearchChange}
+        />
+        <div style={{ marginTop: 10 }}>
+          <b>Filter</b>
+          <label>
+            <input
+              type="checkbox"
+              onChange={e => handleFilterChange(e, 'Movie')}
+              checked={filters.type.includes('Movie')}
+            ></input>{' '}
+            Movie
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              onChange={e => handleFilterChange(e, 'TV Show')}
+              checked={filters.type.includes('TV Show')}
+            ></input>{' '}
+            TV Show
+          </label>
+        </div>
+        <Result search={search} filters={filters} />
       </div>
-
-      {loading ? 'Procsesing the data...' : ''}
-      <p>
-        <b>Filtered:</b> {result.length}
-      </p>
-      <ul>
-        {result.map(
-          (i: { show_id: string; type: string; director: string }) => (
-            <li key={i.show_id}>
-              <span>
-                <b>Type: </b>
-                {i.type}
-              </span>{' '}
-              <br />
-              <span>
-                <b>Director: </b>
-                {i.director}
-              </span>
-            </li>
-          )
-        )}
-      </ul>
-    </div>
+    </DataContextProvider>
   );
 };
 

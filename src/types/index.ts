@@ -9,7 +9,7 @@ export interface Search {
 }
 
 export interface HookParams {
-  data: unknown[];
+  data: any;
   filters?: Filter;
   search?: Search;
 }
