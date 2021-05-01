@@ -1,22 +1,20 @@
-import * as React from "react";
+import * as React from 'react';
 
-export const DataContext = React.createContext({ data: [] });
+export const DataContext = React.createContext([]);
 
 export const DataContextProvider = ({ children }) => {
   const [data, setData] = React.useState({ loading: true, data: [] });
-  React.useState(() => {
+  React.useEffect(() => {
     let isMounted = true;
 
     async function fetchData() {
-      const res = await fetch(
-        `sample.json`
-      );
+      const res = await fetch(`sample.json`);
       const resData = await res.json();
 
       if (isMounted) {
         setData({
           loading: false,
-          data: resData
+          data: resData,
         });
       }
     }
@@ -26,14 +24,12 @@ export const DataContextProvider = ({ children }) => {
     return () => {
       isMounted = false;
     };
-  });
+  }, []);
 
   if (data.loading) {
     return <h1>Loading data... </h1>;
   }
   return (
-    <DataContext.Provider value={{ data: data.data }}>
-      {children}
-    </DataContext.Provider>
+    <DataContext.Provider value={data.data}>{children}</DataContext.Provider>
   );
 };

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { HookParams } from './types';
+import { hasFilters } from './utils/hasFilter';
 import { createComlink } from './utils/comlink';
 
 const useComlink = createComlink(() => new Worker('./utils/worker.ts'));
@@ -9,13 +10,18 @@ export const useFilter = ({ data, search, filters }: HookParams) => {
   const [result, setResult] = useState(data);
   const { proxy } = useComlink();
 
+  const isHavingFilters = useMemo(() => hasFilters(search, filters), [
+    search,
+    filters,
+  ]);
+
   useEffect(() => {
     let isMounted = true;
 
-    if (isMounted) {
-      setLoading(true);
-    }
     (async () => {
+      if (isMounted) {
+        setLoading(true);
+      }
       // @ts-ignore
       const res = await proxy({ data, search, filters });
       if (isMounted) {
@@ -31,6 +37,6 @@ export const useFilter = ({ data, search, filters }: HookParams) => {
 
   return {
     loading,
-    data: result,
+    data: isHavingFilters ? result : data,
   };
 };

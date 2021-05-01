@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "react-app-polyfill": "^1.0.0",
-    "react-window": "^1.8.6"
+    "react-window": "^1.8.6",
+    "use-debounce": "^6.0.1"
   },
   "alias": {
     "react": "../node_modules/react",

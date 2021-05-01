@@ -5,9 +5,8 @@ import { DataContext } from './DataContext';
 import { useFilter } from '../src';
 
 const Result = ({ search, filters }) => {
-  const { data } = React.useContext(DataContext);
-  const { loading, data: result } = useFilter({ data, search, filters });
-
+  const data = React.useContext(DataContext);
+  const { data: result } = useFilter({ data, search, filters });
   return (
     <div
       style={{
@@ -36,38 +35,34 @@ const Result = ({ search, filters }) => {
       </div>
       <hr />
 
-      {loading ? (
-        <h1>Filtering data...</h1>
-      ) : (
-        <>
-          {result.length > 0 ? (
-            <>
-              <List
-                height={300}
-                itemCount={result.length}
-                itemSize={25}
-                width={500}
-              >
-                {({ index, style }) => (
-                  <div
-                    style={{
-                      ...style,
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <div>{result[index].show_id}</div>
-                    <div>{result[index].director}</div>
-                    <div>{result[index].type}</div>
-                  </div>
-                )}
-              </List>
-            </>
-          ) : (
-            <h1> Data Not Found</h1>
-          )}
-        </>
-      )}
+      <>
+        {result.length > 0 ? (
+          <>
+            <List
+              height={300}
+              itemCount={result.length}
+              itemSize={25}
+              width={500}
+            >
+              {({ index, style }) => (
+                <div
+                  style={{
+                    ...style,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <div>{result[index].show_id}</div>
+                  <div>{result[index].director}</div>
+                  <div>{result[index].type}</div>
+                </div>
+              )}
+            </List>
+          </>
+        ) : (
+          <h1> Data Not Found</h1>
+        )}
+      </>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { useDebounce } from 'use-debounce';
 import { DataContextProvider } from './DataContext';
 import Result from './Result';
 
@@ -17,13 +18,11 @@ const filtersData: {
 
 const App = () => {
   const [filters, setFilters] = React.useState(filtersData);
-  const [search, setSearch] = React.useState(searchData);
+  const [search, setSearch] = React.useState('');
+  const [value] = useDebounce(search, 300);
 
   const handleSearchChange = e => {
-    setSearch({
-      ...search,
-      query: e.target.value,
-    });
+    setSearch(e.target.value);
   };
 
   const handleFilterChange = (e, label) => {
@@ -64,7 +63,13 @@ const App = () => {
             TV Show
           </label>
         </div>
-        <Result search={search} filters={filters} />
+        <Result
+          search={{
+            query: value,
+            fields: searchData.fields,
+          }}
+          filters={filters}
+        />
       </div>
     </DataContextProvider>
   );
