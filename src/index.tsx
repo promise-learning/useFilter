@@ -17,9 +17,13 @@ const worker = new Worker(
   URL.createObjectURL(new Blob([code], { type: 'text/javascript' }))
 );
 
-export const useFilter = ({ data, search, filters }: HookParams) => {
+export function useFilter<Item extends Record<string, unknown>>({
+  data,
+  search,
+  filters,
+}: HookParams<Item>) {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState([]);
+  const [result, setResult] = useState<Record<string, unknown>[]>([]);
 
   const isHavingFilters = useMemo(() => hasFilters(search, filters), [
     search,
@@ -55,4 +59,4 @@ export const useFilter = ({ data, search, filters }: HookParams) => {
   }, [search, filters]);
 
   return { loading, data: isHavingFilters ? result : data };
-};
+}

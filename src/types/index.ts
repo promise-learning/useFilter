@@ -8,8 +8,8 @@ export interface Search {
   highlight?: boolean;
 }
 
-export interface HookParams {
-  data: any;
+export interface HookParams<Item> {
+  data: Item[];
   filters?: Filter;
   search?: Search;
 }
