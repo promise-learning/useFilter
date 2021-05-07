@@ -1,13 +1,13 @@
 import { HookParams } from '../types';
 
-export function filterFn({
+export function filterFn<Item extends Record<string, unknown>>({
   data = [],
   filters = {},
   search = {
     query: '',
     fields: [],
   },
-}: HookParams) {
+}: HookParams<Item>) {
   let result = Object.assign(data);
 
   if (search && search.query && search.query.trim()) {
