@@ -52,9 +52,13 @@ const Result = ({ search, filters }) => {
                     justifyContent: 'space-between',
                   }}
                 >
-                  <div>{result[index].show_id}</div>
-                  <div>{result[index].director}</div>
-                  <div>{result[index].type}</div>
+                  <div>{result[index].show_id as string}</div>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: result[index].director as string,
+                    }}
+                  />
+                  <div>{result[index].type as string}</div>
                 </div>
               )}
             </List>
