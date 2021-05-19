@@ -2,9 +2,10 @@ import { useEffect, useState, useMemo } from 'react';
 
 import { HookParams } from './types';
 import { hasFilters } from './utils/hasFilter';
-import { filterFn } from './utils/worker';
+import { filterFn, highlightSearch } from './utils/worker';
 
 const code = `
+  ${highlightSearch.toString()}
   ${filterFn.toString()}
   onmessage = function(e) {
     const params = e.data;

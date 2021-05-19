@@ -8,6 +8,7 @@ import Result from './Result';
 const searchData = {
   query: '',
   fields: ['director'],
+  enableHighlighting: true,
 };
 
 const filtersData: {
@@ -67,6 +68,7 @@ const App = () => {
           search={{
             query: value,
             fields: searchData.fields,
+            enableHighlighting: true,
           }}
           filters={filters}
         />

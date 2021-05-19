@@ -5,7 +5,7 @@ export interface Filter {
 export interface Search {
   query: string;
   fields: string[];
-  highlight?: boolean;
+  enableHighlighting?: boolean;
 }
 
 export interface HookParams<Item> {
