@@ -1,13 +1,16 @@
 import { HookParams } from '../types';
 
-export const highlightSearch = (value: string, searchQuery: string): string => {
+export function highlightSearch(value: string, searchQuery: string): string {
   const reg = new RegExp(
     searchQuery.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&'),
     'i'
   );
 
-  return value.replace(reg, str => `<mark class="bg-yellow-200">${str}</mark>`);
-};
+  return value.replace(
+    reg,
+    str => `<mark class="use-filter-highlight">${str}</mark>`
+  );
+}
 
 export function filterFn<Item extends Record<string, unknown>>({
   data = [],
