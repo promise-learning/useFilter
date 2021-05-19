@@ -1,94 +1,26 @@
 import 'jsdom-worker';
-import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { act } from 'react-dom/test-utils';
-import { filterFn } from '../src/utils/worker';
-import { Search, Filter } from '../src/types/';
+import { renderHook } from '@testing-library/react-hooks';
 
 // @ts-ignore
 import data from '../data/sample.json';
 import { useFilter } from '../src';
 
-function sleep(ms: number): Promise<any> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+test('should filter data using useFilter', async () => {
+  const searchData = {
+    query: 'jorge',
+    fields: ['director'],
+  };
+  const filters = {
+    type: 'Movie',
+  };
+  const { result, waitForNextUpdate } = renderHook(() =>
+    // @ts-ignore
+    useFilter({ data, search: searchData, filters })
+  );
+  expect(result.current.loading).toBe(true);
 
-const TestComponent = ({
-  search,
-  filters,
-}: {
-  search: Search;
-  filters: Filter;
-}) => {
-  //@ts-ignore
-  const { loading, data: result } = useFilter({ data, search, filters });
+  await waitForNextUpdate();
 
-  console.log({ loading, l: result.length });
-
-  if (loading) {
-    return <div>loading</div>;
-  }
-  return <div>{result.length}</div>;
-};
-
-describe('it', () => {
-  it('searches data', async () => {
-    const searchData = {
-      query: 'jorge',
-      fields: ['director'],
-    };
-
-    //@ts-ignore
-    const result = filterFn({ data, search: searchData });
-    expect(result.length).toBe(7);
-  });
-
-  it('filters data', async () => {
-    const filters = {
-      type: 'Movie',
-    };
-
-    //@ts-ignore
-    const result = filterFn({ data, filters });
-    expect(result.length).toBe(5377);
-  });
-
-  it('search and filter data', async () => {
-    const searchData = {
-      query: 'jorge',
-      fields: ['director'],
-    };
-    const filters = {
-      type: 'Movie',
-    };
-
-    //@ts-ignore
-    const result = filterFn({ data, filters, search: searchData });
-    expect(result.length).toBe(7);
-  });
-
-  it('useFilter hook runs correctly', async () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const searchData = {
-      query: 'jorge',
-      fields: ['director'],
-    };
-    const filters = {
-      type: 'Movie',
-    };
-
-    act(() => {
-      render(
-        <TestComponent search={searchData} filters={filters} />,
-        container
-      );
-    });
-    expect(container.textContent).toBe('loading');
-    await sleep(500);
-    expect(container.textContent).toBe('7');
-
-    unmountComponentAtNode(container);
-    container.remove();
-  });
+  expect(result.current.loading).toBe(false);
+  expect(result.current.data.length).toBe(7);
 });
