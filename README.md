@@ -54,7 +54,7 @@ A react hook to filter large amount of data in frontend using [Web Worker](https
 | Parameter | Type                                                                                                         | Required |
 | --------- | ------------------------------------------------------------------------------------------------------------ | -------- |
 | data      | Array                                                                                                        | `true`   |
-| search    | Object -> `{query: '', fields: []}`. `query` is the search term and `fields` is the object keys to search on | `false`  |
+| search    | Object -> `{query: '', fields: [], enableHighlighting: true}`. `query` is the search term, `fields` is the object keys to search on | `false` and `enableHighlighting` lets you highlight the matching part  |
 | filters   | Object -> Key Value Pair. Where `key` is a field from object in array and value could be possible value      | `false`  |
 
 ### Data Returned
