@@ -29,7 +29,7 @@ export function filterFn<Item extends Record<string, unknown>>({
         let hasSearchTerm = false;
         const itemToReturn = Object.assign({}, item);
         search.fields.forEach((field: string) => {
-          const fieldVal = (<string>item[field]).toString().toLowerCase();
+          const fieldVal = (item[field] as string).toString().toLowerCase();
           if (fieldVal.includes(queryLowerCase)) {
             hasSearchTerm = true;
             // @ts-ignore
@@ -46,7 +46,7 @@ export function filterFn<Item extends Record<string, unknown>>({
     } else {
       result = data.filter((item: Item) =>
         search.fields.some((field: string) => {
-          const fieldLowerCase = (<string>item[field]).toLowerCase();
+          const fieldLowerCase = (item[field] as string).toLowerCase();
           return fieldLowerCase.includes(queryLowerCase);
         })
       );
@@ -57,7 +57,7 @@ export function filterFn<Item extends Record<string, unknown>>({
     Object.keys(filters).forEach((field: string) => {
       if (filters[field] && filters[field].length) {
         result = result.filter((item: Item) =>
-          filters[field].includes(<string>item[field])
+          filters[field].includes(item[field] as string)
         );
       }
     });
